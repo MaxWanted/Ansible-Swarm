@@ -1,6 +1,6 @@
 ---
 - name: Preconfig
-  hosts: demo
+  hosts: cluster
   tasks:
     - name: Install Docker
       block:
@@ -8,6 +8,13 @@
           apt_repository:
             repo: "deb http://us.archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
             state: present
+
+        - name: Removing docker.list
+          file:
+            path: "{{ item }}"
+            state: absent
+          with_items:
+            - /etc/apt/sources.list.d/docker.list
 
         - name: Install extra packages
           apt:
@@ -18,24 +25,28 @@
               - gnupg
               - lsb-release
             update-cache: true
-            cache_valid_time: 86400
 
-        - name: Add Docker-key
+        - name: Add Docker GPG apt Key
           apt_key:
             url: https://download.docker.com/linux/ubuntu/gpg
             state: present
+            # keyring: /usr/share/keyrings/docker-archive-keyring.gpg
 
-        - name: Install stable repo
+        - name: Add Docker Repository
           apt_repository:
             repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
             state: present
-            update-cache: true
-            filename: docker
+            # update-cache: true
+            # filename: docke
+
+        - name: shell script
+          shell: dpkg --configure -a
 
         - name: Install Docker-ce
           apt:
             name: docker-ce
             update-cache: true
+
 
         - name: Check Docker install and restart
           service:
