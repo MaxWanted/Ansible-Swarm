@@ -1,0 +1,81 @@
+---
+- name: Install Docker
+  block:
+    - name: Add universe
+      apt_repository:
+        repo: "deb http://us.archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
+        state: present
+
+    - name: Removing docker.list
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/apt/sources.list.d/docker.list
+
+    - name: Install extra packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        update-cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        # keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+        # update-cache: true
+        # filename: docker
+
+    # - name: shell script
+    #   shell: dpkg --configure -a
+
+    - name: Install Docker-ce
+      apt:
+        name: docker-ce
+        update-cache: true
+
+
+    - name: Check Docker install and restart
+      service:
+        name: docker
+        state: restarted
+        enabled: true
+  become: true
+
+- name: Install Docker-compose
+  block:
+    - name: Get last version Docker-compose
+      uri:
+        url: https://api.github.com/repos/docker/compose/releases/latest
+        body_format: json
+      # переменная страницы
+      register: page
+
+    - name: Install Docker-compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/{{ page.json.tag_name }}/docker-compose-Linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+        mode: 0755
+  become: true
+
+- name: Finish install
+  block:
+    - name: Add user in group Docker
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+
+    - name: Restart server
+      reboot:
+  become: true
