@@ -21,6 +21,7 @@
           - curl
           - gnupg
           - lsb-release
+          - python3-pip
         update-cache: true
 
     - name: Add Docker GPG apt Key
@@ -67,6 +68,12 @@
         dest: /usr/local/bin/docker-compose
         mode: 0755
   become: true
+
+- name: Install Python extra-packages
+  block:
+    - name: Install pip-packages
+      pip:
+        name: docker
 
 - name: Finish install
   block:
