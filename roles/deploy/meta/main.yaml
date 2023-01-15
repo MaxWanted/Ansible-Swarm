@@ -1,0 +1,4 @@
+argument_specs:
+  main:
+    short_description: Деплой микросервисов на Docker кластер
+    author: Maksim Derkach
