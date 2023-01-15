@@ -1,4 +1,10 @@
-argument_specs:
-  main:
-    short_description: Деплой микросервисов на Docker кластер
-    author: Maksim Derkach
+galaxy_info:
+  role_name: deploy
+  description: Деплой микросервисов на Docker кластер
+  author: Maksim Derkach
+  licence: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      version:
+        - all
