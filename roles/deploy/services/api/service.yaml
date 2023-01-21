@@ -1,0 +1,24 @@
+---
+- name: "[{{ name }}] Configure secret"
+  include_tasks: "../secret.yaml"
+
+# деплоим сервис
+- name: "[{{ name }}] Deploy service"
+  block:
+    - name: "[{{ name }}] Deploy service"
+      community.docker.docker_swarm_service:
+        name: "{{ name }}"
+        image: "localhost:5000/{{ name }}:latest"  # наш image с registry
+        state: present
+        force_update: true
+        networks:
+          - name: "{{ network_name }}"
+        publish:
+          - mode: ingress
+            protocol: tcp
+            published_port: 3002
+            target_port: 3000
+        secrets:
+          - secret_name: "{{ name }}.env"
+            filename: "/opt/app/.env"  # внутри контейнера
+  tags: "{{ name }}"
