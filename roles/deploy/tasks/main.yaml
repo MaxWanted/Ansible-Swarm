@@ -1,5 +1,11 @@
 ---
-- name: Deploy
-  command: "echo {{ test }}"
-  register: res
-  changed_when: "'0' not in res.stdout"
+- name: Create network
+  community.docker.docker_network:
+    name: "{{ network_name }}"
+    driver: overlay
+
+- name: Deploy services
+  include_tasks: "../services/{{ item }}/service.yaml"
+  vars:
+    - name: "{{ item }}" # переменная для service.yaml
+  loop: "{{ services }}"
