@@ -7,8 +7,9 @@
 
 - name: Directory exist
   delegate_to: localhost
-  stat:
+  file:
     path: ./tokens
+    state: directory
 
 
 # сохраняем токены локально из сворма на хост
