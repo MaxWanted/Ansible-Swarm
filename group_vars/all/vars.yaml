@@ -33,3 +33,6 @@ non_build_services:
 configs:
   converter:
     queue: q_imageProcessor
+
+# переменная дял кластера и роли deploy
+advertise_addr: 10.11.10.1
