@@ -10,6 +10,7 @@
   file:
     path: ./tokens
     state: directory
+    mode: '0664'
 
 
 # сохраняем токены локально из сворма на хост
@@ -18,9 +19,11 @@
   copy:
     dest: ./tokens/token-manager
     content: "{{ token.swarm_facts.JoinTokens.Manager }}"
+    mode: '0664'
 
 - name: Save token 'worker'
   delegate_to: localhost
   copy:
     dest: ./tokens/token-worker
     content: "{{ token.swarm_facts.JoinTokens.Worker }}"
+    mode: '0664'
