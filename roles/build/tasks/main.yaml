@@ -8,8 +8,10 @@
 - name: Build image
   community.docker.docker_image:
     name: "{{ registry_name }}{{ item.name }}"
-    tes: "{{ item.version }}"
+    tag: "{{ item.version }}"
     push: true
+    force_source: true
+    force_tag: true
     build:
       path: "{{ git_folder }}"
       dockerfile: "{{ git_folder }}/apps/{{ item.name }}/Dockerfile"

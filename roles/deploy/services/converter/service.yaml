@@ -1,6 +1,6 @@
 ---
-- name: "[{{ name }}] CConfigure secret"
-  include_tasks: "../secret.yml"
+- name: "[{{ name }}] Configure secret"
+  include_tasks: "../secret.yaml"
 
 - name: "[{{ name }}] Deploy service"
   block:
