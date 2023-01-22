@@ -5,25 +5,24 @@
     advertise_addr: "{{ advertise_addr }}"
   register: token
 
-- name: Directory exist
-  delegate_to: localhost
-  file:
-    path: ./tokens
-    state: directory
-    mode: '0777'
+- name: Save tokens
+  set_fact:
+    token_manager: "{{ token.swarm_facts.JoinTokens.Manager }}"
+    token_worker: "{{ token.swarm_facts.JoinTokens.Worker }}"
+    cacheable: true
 
 
-# сохраняем токены локально из сворма на хост
-- name: Save token 'manager'
-  delegate_to: localhost
-  copy:
-    dest: ./tokens/token-manager
-    content: "{{ token.swarm_facts.JoinTokens.Manager }}"
-    mode: '0664'
+# # сохраняем токены локально из сворма на хост
+# - name: Save token 'manager'
+#   delegate_to: localhost
+#   copy:
+#     dest: ./tokens/token-manager
+#     content: "{{ token.swarm_facts.JoinTokens.Manager }}"
+#     mode: '0664'
 
-- name: Save token 'worker'
-  delegate_to: localhost
-  copy:
-    dest: ./tokens/token-worker
-    content: "{{ token.swarm_facts.JoinTokens.Worker }}"
-    mode: '0664'
+# - name: Save token 'worker'
+#   delegate_to: localhost
+#   copy:
+#     dest: ./tokens/token-worker
+#     content: "{{ token.swarm_facts.JoinTokens.Worker }}"
+#     mode: '0664'
