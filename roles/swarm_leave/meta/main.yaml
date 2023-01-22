@@ -1,0 +1,10 @@
+galaxy_info:
+  role_name: swarm_leave
+  description: Delete swarm node
+  author: Maksim Derkach
+  licence: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      version:
+        - all

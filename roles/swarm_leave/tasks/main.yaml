@@ -1,0 +1,21 @@
+---
+- name: Switch to drain status
+  community.docker.docker_node:
+    hostname: "{{ node_name }}"
+    availability: drain
+
+
+# проверяем пока запущенных контейнеров станет 0
+- name: w8 node status
+  community.docker.docker_host_info:
+    containers: true
+  register: result
+  retries: 30
+  delay: 2
+  until: result.host_info.ContainersRunning == 0
+  delegate_to: "{{ node_name }}"
+
+
+- name: Remove node from swarm
+  command: "docker node rm {{ node_name }} --force"
+  changed_when: false
