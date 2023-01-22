@@ -5,7 +5,8 @@
     driver: overlay
 
 - name: Deploy services
-  include_tasks: "../services/{{ item }}/service.yaml"
+  include_tasks: "../services/{{ item.name }}/service.yaml"
   vars:
-    - name: "{{ item }}" # переменная для service.yaml
+    - name: "{{ item.name }}" # переменная для service.yaml
+    - version: "{{ item.version }}"
   loop: "{{ services }}"

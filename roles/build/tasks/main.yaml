@@ -1,0 +1,23 @@
+---
+- name: Clone repo
+  ansible.builtin.git:
+    repo: 'https://github.com/MaxWanted/docker-demo.git'
+    dest: "{{ git_folder }}"
+    version: main
+
+- name: Build image
+  community.docker.docker_image:
+    name: "{{ registry_name }}{{ item.name }}"
+    tes: "{{ item.version }}"
+    push: true
+    build:
+      path: "{{ git_folder }}"
+      dockerfile: "{{ git_folder }}/apps/{{ item.name }}/Dockerfile"
+    source: build
+  # исключаем из сервисом те, которые не нужно билдить из vars
+  loop: "{{ services | difference(non_build_services) }}"
+
+- name: Delete repo
+  file:
+    state: absent
+    path: "{{ git_folder }}"

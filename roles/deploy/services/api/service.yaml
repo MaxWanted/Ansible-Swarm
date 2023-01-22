@@ -8,7 +8,7 @@
     - name: "[{{ name }}] Deploy service"
       community.docker.docker_swarm_service:
         name: "{{ name }}"
-        image: "localhost:5000/{{ name }}:latest"  # наш image с registry
+        image: "{{ registry_name }}{{ name }}:{{ version }}"  # наш image с registry
         state: present
         force_update: true
         networks:
