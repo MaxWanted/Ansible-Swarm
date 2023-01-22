@@ -1,0 +1,17 @@
+---
+- name: "[{{ name }}] Configure config"
+  block:
+    - name: "[{{ name }}] Create config"
+      include_tasks: "config-create.yaml"
+  tags: "{{ name }}"
+
+  # в случае ошибки перехватываем rescue и удаляем сервис с конфигом
+  rescue:
+    - name: "[{{ name }}] Delete service"
+      community.docker.docker_swarm_service:
+        name: "{{ name }}"
+        state: absent
+
+  # снова созадем конфиг
+    - name: "[{{ name }}] Create config"
+      include_tasks: "config-create.yaml"
