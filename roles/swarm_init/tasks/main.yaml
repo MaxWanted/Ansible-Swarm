@@ -1,0 +1,25 @@
+---
+- name: Init a new swarm
+  community.docker.docker_swarm:
+    state: present
+    advertise_addr: "{{ advertise_addr }}"
+  register: token
+
+- name: Directory exist
+  delegate_to: localhost
+  stat:
+    path: ./tokens
+
+
+# сохраняем токены локально из сворма на хост
+- name: Save token 'manager'
+  delegate_to: localhost
+  copy:
+    dest: ./tokens/token-manager
+    content: "{{ token.swarm_facts.JoinTokens.Manager }}"
+
+- name: Save token 'worker'
+  delegate_to: localhost
+  copy:
+    dest: ./tokens/token-worker
+    content: "{{ token.swarm_facts.JoinTokens.Worker }}"
