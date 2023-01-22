@@ -16,6 +16,12 @@
   delegate_to: "{{ node_name }}"
 
 
+- name: Demote node role
+  community.docker.docker_node:
+    hostname: "{{ node_name }}"
+    role: worker
+
+
 - name: Remove node from swarm
   command: "docker node rm {{ node_name }} --force"
   changed_when: false
