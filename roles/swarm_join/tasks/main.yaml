@@ -1,0 +1,9 @@
+---
+- name: Connect to swarm
+  # берем переменную type из all.yaml по последней фразе токена
+  vars:
+    token: "{{ lookup('file','../../tokens/token-{{ type }}') }}"
+  community.docker.docker_swarm:
+    state: join
+    remote_addrs: "{{ advertise_addr }}"
+    join_token: "{{ token }}"
