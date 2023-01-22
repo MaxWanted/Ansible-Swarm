@@ -3,7 +3,7 @@
   ansible.builtin.git:
     repo: 'https://github.com/MaxWanted/docker-demo.git'
     dest: "{{ git_folder }}"
-    version: main
+    version: nginx # ветка
 
 - name: Build image
   community.docker.docker_image:

@@ -20,11 +20,15 @@ services:
     version: latest
   - name: rmq
     version: 3-management
+  - name: nginx
+    version: latest
 
 # используем фильтр для rmq т.к. его не нужно билдить
 non_build_services:
   - name: rmq
     version: 3-management
+  - name: nginx
+    version: latest
 
 configs:
   converter:
